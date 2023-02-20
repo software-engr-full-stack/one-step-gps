@@ -24,7 +24,7 @@ func (m *CustomerModel) Validate() error {
 
 func (m *CustomerModel) Get(id int) (*models.Customer, error) {
     stmt := fmt.Sprintf(
-        `SELECT id, name, business_category, img_url, created, updated FROM %s
+        `SELECT id, name, business_category, payload, img_url, created, updated FROM %s
         WHERE id = ?`,
         tableName,
     )
@@ -32,7 +32,7 @@ func (m *CustomerModel) Get(id int) (*models.Customer, error) {
     row := m.DB.QueryRow(stmt, id)
 
     cm := &models.Customer{}
-    err := row.Scan(&cm.ID, &cm.Name, &cm.BusinessCategory, &cm.ImgURL, &cm.Created, &cm.Updated)
+    err := row.Scan(&cm.ID, &cm.Name, &cm.BusinessCategory, &cm.Payload, &cm.ImgURL, &cm.Created, &cm.Updated)
     if err == sql.ErrNoRows {
         return nil, models.ErrNoRecord
     } else if err != nil {
@@ -44,7 +44,7 @@ func (m *CustomerModel) Get(id int) (*models.Customer, error) {
 
 func (m *CustomerModel) Latest() ([]*models.Customer, error) {
     stmt := fmt.Sprintf(
-        `SELECT id, name, business_category, img_url, created, updated FROM %s
+        `SELECT id, name, business_category, payload, img_url, created, updated FROM %s
         ORDER BY created DESC LIMIT 10`,
         tableName,
     )
@@ -57,7 +57,7 @@ func (m *CustomerModel) Latest() ([]*models.Customer, error) {
     customers := []*models.Customer{}
     for rows.Next() {
         cm := &models.Customer{}
-        err = rows.Scan(&cm.ID, &cm.Name, &cm.BusinessCategory, &cm.ImgURL, &cm.Created, &cm.Updated)
+        err = rows.Scan(&cm.ID, &cm.Name, &cm.BusinessCategory, &cm.Payload, &cm.ImgURL, &cm.Created, &cm.Updated)
         if err != nil {
             return nil, err
         }
