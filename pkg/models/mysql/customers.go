@@ -2,16 +2,16 @@ package mysql
 
 import (
     "fmt"
-    "strings"
 
     "database/sql"
 
     "github.com/software-engr-full-stack/one-step-gps/pkg/models"
 )
 
+const tableName = "customers"
+
 type CustomerModel struct {
-    DB     *sql.DB
-    DBName string
+    DB *sql.DB
 }
 
 func (m *CustomerModel) Validate() error {
@@ -19,40 +19,52 @@ func (m *CustomerModel) Validate() error {
         return fmt.Errorf("DB must not be nil")
     }
 
-    m.DBName = strings.TrimSpace(m.DBName)
-    if m.DBName == "" {
-        return fmt.Errorf("DBName must not be blank")
-    }
-
     return nil
 }
 
-func (m *CustomerModel) Insert(title, content, expires string) (int, error) {
-    return 0, nil
-}
-
-// TODO: paginate
-func (m *CustomerModel) All() ([]*models.Customer, error) {
-    return nil, nil
-}
-
 func (m *CustomerModel) Get(id int) (*models.Customer, error) {
-    stmt := `SELECT id, title, content, created, expires FROM snippets
-    WHERE expires > UTC_TIMESTAMP() AND id = ?`
+    stmt := fmt.Sprintf(
+        `SELECT id, name, business_category, img_url, created, updated FROM %s
+        WHERE id = ?`,
+        tableName,
+    )
 
     row := m.DB.QueryRow(stmt, id)
 
-    s := &models.Customer{}
-    err := row.Scan(&s.ID, &s.Title, &s.Content, &s.Created, &s.Expires)
+    cm := &models.Customer{}
+    err := row.Scan(&cm.ID, &cm.Name, &cm.BusinessCategory, &cm.ImgURL, &cm.Created, &cm.Updated)
     if err == sql.ErrNoRows {
         return nil, models.ErrNoRecord
     } else if err != nil {
         return nil, err
     }
 
-    return s, nil
+    return cm, nil
 }
 
 func (m *CustomerModel) Latest() ([]*models.Customer, error) {
-    return nil, nil
+    stmt := fmt.Sprintf(
+        `SELECT id, name, business_category, img_url, created, updated FROM %s
+        ORDER BY created DESC LIMIT 10`,
+        tableName,
+    )
+    rows, err := m.DB.Query(stmt)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    customers := []*models.Customer{}
+    for rows.Next() {
+        cm := &models.Customer{}
+        err = rows.Scan(&cm.ID, &cm.Name, &cm.BusinessCategory, &cm.ImgURL, &cm.Created, &cm.Updated)
+        if err != nil {
+            return nil, err
+        }
+        customers = append(customers, cm)
+    }
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+    return customers, nil
 }

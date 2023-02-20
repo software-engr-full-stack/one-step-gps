@@ -52,7 +52,7 @@ func main() {
     app := &application{
         errorLog:  errorLog,
         infoLog:   infoLog,
-        customers: &mysql.CustomerModel{DB: db},
+        customers: cm,
     }
 
     server := &http.Server{
