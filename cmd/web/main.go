@@ -12,11 +12,14 @@ import (
     "database/sql"
 
     _ "github.com/go-sql-driver/mysql"
+
+    "github.com/software-engr-full-stack/one-step-gps/pkg/models/mysql"
 )
 
 type application struct {
-    errorLog *log.Logger
-    infoLog  *log.Logger
+    errorLog  *log.Logger
+    infoLog   *log.Logger
+    customers *mysql.CustomerModel
 }
 
 type argsType struct {
@@ -42,9 +45,14 @@ func main() {
     }
     defer db.Close()
 
+    cm := &mysql.CustomerModel{DB: db}
+    if err := cm.Validate(); err != nil {
+        errorLog.Fatal(err)
+    }
     app := &application{
-        errorLog: errorLog,
-        infoLog:  infoLog,
+        errorLog:  errorLog,
+        infoLog:   infoLog,
+        customers: &mysql.CustomerModel{DB: db},
     }
 
     server := &http.Server{
