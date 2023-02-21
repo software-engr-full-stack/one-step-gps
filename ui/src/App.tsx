@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
 
 import './App.css';
 
@@ -59,13 +60,25 @@ function App() {
 
   return (
     <div className="one-step-gps">
-      <Button
-        onClick={onClick}
-        color={isPollingCoordinates ? 'error' : 'success'}
-        variant="contained"
-      >
-        {isPollingCoordinates ? 'Stop' : 'Run'}
-      </Button>
+      <div className="misc">
+        <Button
+          onClick={onClick}
+          color={isPollingCoordinates ? 'error' : 'success'}
+          variant="contained"
+        >
+          {isPollingCoordinates ? 'Stop' : 'Run'}
+        </Button>
+
+        {'    '}
+
+        <Link
+          href="https://github.com/software-engr-full-stack/one-step-gps"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          What is this? (Repo README)
+        </Link>
+      </div>
       <Map markers={data} />
     </div>
   );
