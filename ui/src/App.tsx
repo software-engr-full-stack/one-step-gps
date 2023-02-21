@@ -33,16 +33,12 @@ function App() {
 
       const list = data.length > 0 ? data : customers;
 
-      const withCoords : any[] = list.map((cust: any) => {
+      const withCoords : any[] = list.filter(({id}) => coordsById[id]).map((cust: any) => {
         const currentCrd = coordsById[cust.id];
+        if (!currentCrd) throw(`unable to find coordinates for id '${cust.id}'`);
 
-        let crdList;
-        if (currentCrd) {
-          const initCrdList = cust.crdList ? [...cust.crdList, currentCrd] : [currentCrd];
-          crdList = initCrdList.length > 3 ? initCrdList.slice(cust.crdList.length - 3) : initCrdList;
-        } else {
-          crdList = cust.crdList ||[];
-        }
+        const initCrdList = cust.crdList ? [...cust.crdList, currentCrd] : [currentCrd];
+        const crdList = initCrdList.length > 3 ? initCrdList.slice(cust.crdList.length - 3) : initCrdList;
 
         return {
           ...cust,

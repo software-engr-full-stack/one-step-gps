@@ -26,18 +26,13 @@ func Coordinates(ids []int) ([]CoordinatesType, error) {
     }
 
     coords := []CoordinatesType{}
-    for ix, id := range ids {
-        // First id is always updated, the rest are updated randomly.
-        if ix != 0 {
-            if rand.Int()%(ix+3) == 0 { //nolint:gosec
-                continue
-            }
-        }
+    for _, id := range ids {
         coords = append(coords, CoordinatesType{
             ID:   id,
             Lat:  minLat + rand.Float64()*(maxLat-minLat),    //nolint:gosec
             Long: minLong + rand.Float64()*(maxLong-minLong), //nolint:gosec
         })
     }
+
     return coords, nil
 }
