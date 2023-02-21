@@ -23,14 +23,17 @@ function Markers({ markers }) {
     );
   }, [map]);
 
+  // markers.slice(0, -1)
+
   return (
     <>
       {
-        markers.slice(0, -1).map(({ id, name, businessCategory, payload, color, crdList }) => (
-          crdList.map(({ lat, long}, ix) => {
+        markers.map(({ id, name, businessCategory, payload, color, crdList }) => (
+          crdList.map(({lat, long}, ix) => {
             const radius = ix === crdList.length - 1 ? 7 : 4
             const weight = ix === crdList.length - 1 ? 5 : 6;
             const currentPostion = ix === crdList.length - 1 && 'Current position';
+
             return (
               <React.Fragment key={id * lat * long}>
                 {

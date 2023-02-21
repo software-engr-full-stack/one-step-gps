@@ -35,10 +35,14 @@ function App() {
 
       const withCoords : any[] = list.map((cust: any) => {
         const currentCrd = coordsById[cust.id];
-        if (!currentCrd) throw(`unable to find coordinates for id '${cust.id}'`);
 
-        const initCrdList = cust.crdList ? [...cust.crdList, currentCrd] : [currentCrd];
-        const crdList = initCrdList.length > 3 ? initCrdList.slice(cust.crdList.length - 3) : initCrdList;
+        let crdList;
+        if (currentCrd) {
+          const initCrdList = cust.crdList ? [...cust.crdList, currentCrd] : [currentCrd];
+          crdList = initCrdList.length > 3 ? initCrdList.slice(cust.crdList.length - 3) : initCrdList;
+        } else {
+          crdList = cust.crdList ||[];
+        }
 
         return {
           ...cust,
