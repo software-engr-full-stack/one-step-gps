@@ -23,3 +23,5 @@ This is a small toy demo app using Go, React, Leaflet and Material UI. When the 
 9. Run `go build -o tmp/web ./cmd/web`
 
 10. Run `./tmp/web -dbname=one_step_gps -dbuser=go -dbpw=$PASSWORD`
+
+11. Point your browser to `http://localhost:4000`
