@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS customers (
   name VARCHAR(100) NOT NULL,
   business_category TEXT NOT NULL,
   payload TEXT NOT NULL,
+  color VARCHAR(40) NOT NULL,
   img_url VARCHAR(100) NOT NULL,
   created DATETIME NOT NULL,
   updated DATETIME NOT NULL
