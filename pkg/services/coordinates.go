@@ -12,6 +12,7 @@ type CoordinatesType struct {
 }
 
 const (
+    // Min/max lat/long forms a rectangular box in the LA area
     minLat = 33.780486
     maxLat = 34.162326
 
